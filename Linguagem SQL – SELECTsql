@@ -1,0 +1,61 @@
+Create Database IF NOT EXISTS db_loja;
+Use db_loja;
+
+Create Table tb_categoria (
+    cat_id int auto_increment primary key;
+    cat_nome varchar(50) NOT NULL
+);
+
+Create Table tb_fornecedor (
+    for_id int auto_increment primary key;
+    for_nome varchar (60) NOT NULL;
+    for_cidade varchar(50)
+);
+
+Create Table tb_produto (
+    prod_id int auto_increment Primary Key;
+    prod_nome varchar(80) NOT NULL;
+    prod_data_cadastro DATA;
+    prod_price decimal (10, 2);
+    prod_id_categoria int NOT NULL;
+    prod_id_fornecedor int NOT NULL ;
+    Foreign Key (prod_id_categoria) REFERENCES tb_categoria(cat_id)
+    Foreign Key (prod_id_fornecedor) REFERENCES tb_fornecedor(for_id)
+);
+
+Insert Into tb_categoria (cat_nome) Values 
+    ("Informática"),
+    ("Eletrônicos"),
+    ("Papelaria"),
+    ("Games");
+
+Insert Into tb_fornecedor (for_nome, for_cidade) Values
+    ("TechSul", "Porto Alegre"),
+    ("DistriMax", "São Paulo"),
+    ("Papel & Cia", "Campinas"),
+    ("GameHouse", "São Paulo");
+
+Insert Into tb_produto (prod_nome, prod_data_cadastro, prod_price) Values
+    ("Mouse Sem Fio", "2024-02-10", 79.90),
+    ("Teclado mecânico", "2023-11-05", 249.00),
+    ("Monitor 24 polegadas", "2024-06-20", 899.00),
+    ("Fone Bluetooth", "2023-08-14", 159.90),
+    ("Caixa de som portátil", "2022-12-01", 199.00),
+    ("Carregador USB-C", "2024-03-18", 59.90),
+    ("Caderno 10 matérias", "2023-01-25", 32.50),
+    ("Caneta gel (kit 6)", "2024-01-08", 24.90),
+    ("Mochila escolar", "2023-07-30", 149.00),
+    ("Controle sem fio", "2024-05-02", 349.90),
+    ("Jogo de corrida", "2022-10-15", 199.90),
+    ("Headset gamer", "2024-09-12", 289.00);
+
+
+Select prod_nome, prod_price from tb_produto where prod_id_fornecedor = 3; -- 6
+Select * from tb_fornecedor where for_cidade <> like "São Paulo" -- 7
+Select prod_nome, prod_price from tb_produto where prod_price > 200.00; -- 8
+Select prod_nome, prod_price from tb_produto where prod_id_categoria = 2 and prod_price < 100.00; -- 9
+Select prod_nome, cat_nome, for_nome, from tb_produto, tb_categoria, tb_fornecedor where cat_id = 1 or for_id = 4; -- 10
+Select prod_nome, prod_price from tb_produto where prod_price NOT > 100; -- 11
+Select prod_nome, prod_id from tb_produto where prod_id_categoria in (1 and 4); -- 12
+Select * from tb_fornecedor where for_cidade not in (like "São Paulo" or "Campinas"); -- 13
+Select prod_nome as Produto, prod_price as Preço from tb_produto where prod_price between 50 AND 200; -- 14
